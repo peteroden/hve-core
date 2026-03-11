@@ -1,0 +1,5 @@
+{
+  "name": "jira",
+  "description": "Jira issue search, issue updates, transitions, comments, and field discovery through a Python skill",
+  "version": "3.1.46"
+}

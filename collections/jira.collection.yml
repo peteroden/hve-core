@@ -1,0 +1,17 @@
+id: jira
+name: Jira Integration
+description: Jira issue search, issue updates, transitions, comments, and field discovery through a Python skill
+tags:
+  - jira
+  - issue-tracking
+  - workflow
+  - rest-api
+items:
+  # Skills
+  - path: .github/skills/jira/jira
+    kind: skill
+  # Instructions
+  - path: .github/instructions/shared/hve-core-location.instructions.md
+    kind: instruction
+display:
+  ordering: alpha

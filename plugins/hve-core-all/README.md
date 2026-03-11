@@ -189,7 +189,9 @@ copilot plugin install hve-core-all@hve-core
 | powerpoint         | powerpoint         |
 | video-to-gif       | video-to-gif       |
 | vscode-playwright  | vscode-playwright  |
+| gitlab             | gitlab             |
 | hve-core-installer | hve-core-installer |
+| jira               | jira               |
 | pr-reference       | pr-reference       |
 
 ---
