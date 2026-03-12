@@ -31,9 +31,9 @@ Process operations in this fixed order:
 
 ### Step 1: Initialize or Resume
 
-When `handoff-logs.md` exists next to `handoff`:
+When `handoff-logs.md` exists next to `handoff.md`:
 
-* Read `handoff-logs.md` and `handoff`.
+* Read `handoff-logs.md` and `handoff.md`.
 * Identify operations with unchecked `[ ]` status.
 * Rebuild the temporary ID mapping from previously completed Create entries.
 * Resume processing in priority order from the first unchecked operation.
@@ -41,7 +41,7 @@ When `handoff-logs.md` exists next to `handoff`:
 When `handoff-logs.md` does not exist:
 
 * Create `handoff-logs.md` using the template from #file:./jira-backlog-planning.instructions.md.
-* Populate the operation log skeleton from `handoff`.
+* Populate the operation log skeleton from `handoff.md`.
 * Record all inputs in the execution summary section.
 
 Validate the handoff before processing:
@@ -80,7 +80,7 @@ When an operation has no pending changes:
 
 ### Step 3: Finalize and Report
 
-* Re-read `handoff-logs.md` and compare against `handoff`.
+* Re-read `handoff-logs.md` and compare against `handoff.md`.
 * Retry operations once when they were blocked only by a missing `{{TEMP-N}}` mapping that has since been resolved.
 * Cross-check created issues against the plan to confirm all `{{TEMP-N}}` placeholders resolved.
 * Generate a handoff summary with counts for created, updated, transitioned, commented, failed, and skipped operations.
