@@ -72,12 +72,12 @@ Jira workflow support is available through dedicated prompts in this directory. 
 
 ### Azure Operations
 
-* **[Incident Response](./security-planning/incident-response.prompt.md)** - Incident response workflow for Azure operations with triage, diagnostics, mitigation, and RCA phases
+* **[Incident Response](./security/incident-response.prompt.md)** - Incident response workflow for Azure operations with triage, diagnostics, mitigation, and RCA phases
 
 ### Documentation & Process
 
 * **[Pull Request](./hve-core/pull-request.prompt.md)** - PR description and review assistance
-* **[Risk Register](./security-planning/risk-register.prompt.md)** - Generate qualitative risk assessment with P×I matrix and mitigation plans
+* **[Risk Register](./security/risk-register.prompt.md)** - Generate qualitative risk assessment with P×I matrix and mitigation plans
 
 ## Prompts vs Instructions vs Custom Agents
 
@@ -98,7 +98,7 @@ Jira workflow support is available through dedicated prompts in this directory. 
 9. **Checking build status?** Use [ADO Get Build Info](./ado/ado-get-build-info.prompt.md)
 10. **Creating GitHub issues?** Use [GitHub Add Issue](./github/github-add-issue.prompt.md)
 11. **Working on PRs?** Use [Pull Request](./hve-core/pull-request.prompt.md)
-12. **Responding to Azure incidents?** Use [Incident Response](./security-planning/incident-response.prompt.md)
+12. **Responding to Azure incidents?** Use [Incident Response](./security/incident-response.prompt.md)
 13. **Managing Jira work?** Use [Jira Discover Issues](./jira/jira-discover-issues.prompt.md), [Jira Triage Issues](./jira/jira-triage-issues.prompt.md), or [Jira Execute Backlog](./jira/jira-execute-backlog.prompt.md)
 14. **Need GitLab delivery context?** Review the [GitLab Skill](../skills/gitlab/gitlab/SKILL.md) for setup and command guidance
 
