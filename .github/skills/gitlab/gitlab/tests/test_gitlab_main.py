@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: MIT
 """Entry-point tests for gitlab.py."""
 
 from __future__ import annotations

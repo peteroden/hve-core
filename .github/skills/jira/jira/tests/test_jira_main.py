@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: MIT
 """Entry-point and parser tests for jira.py."""
 
 from __future__ import annotations

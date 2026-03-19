@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: MIT
 """Command-level tests for jira.py."""
 
 from __future__ import annotations

@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: MIT
 """Helper-oriented unit tests for jira.py."""
 
 from __future__ import annotations

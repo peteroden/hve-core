@@ -3,6 +3,14 @@
 
 GitLab merge request and pipeline workflows through a Python skill
 
+## Overview
+
+Use GitLab merge request and pipeline workflows from VS Code through a focused Python skill for inspecting merge requests, posting notes, triggering pipelines, and reading job logs.
+
+This collection includes:
+
+- **GitLab Skill** - List and inspect merge requests, create or update merge requests, add notes, inspect pipelines, list jobs, and fetch job logs
+
 ## Install
 
 ```bash
@@ -17,9 +25,9 @@ copilot plugin install gitlab@hve-core
 
 ## Skills
 
-| Skill  | Description |
-|--------|-------------|
-| gitlab | gitlab      |
+| Skill  | Description                                                                                         |
+|--------|-----------------------------------------------------------------------------------------------------|
+| gitlab | Manage GitLab merge requests and pipelines with a Python CLI - Brought to you by microsoft/hve-core |
 
 ---
 

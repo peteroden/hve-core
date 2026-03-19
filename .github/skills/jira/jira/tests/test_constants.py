@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: MIT
 """Shared constants for Jira skill tests."""
 
 from __future__ import annotations

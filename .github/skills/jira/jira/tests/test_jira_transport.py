@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: MIT
 """Transport and environment tests for jira.py."""
 
 from __future__ import annotations

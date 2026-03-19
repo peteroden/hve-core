@@ -5,13 +5,13 @@
 # requires-python = ">=3.11"
 # ///
 
-from __future__ import annotations
-
 """Jira REST API client for common issue workflows.
 
 Supports Jira Cloud with email plus API token authentication and Jira
 Server/Data Center with bearer token authentication.
 """
+
+from __future__ import annotations
 
 import argparse
 import base64
@@ -63,7 +63,8 @@ class JiraClient:
             raise ScriptError("JIRA_BASE_URL is not set", EXIT_USAGE)
         if not re.match(r"^https?://", base_url):
             raise ScriptError(
-                "JIRA_BASE_URL must start with https:// (or http:// for local development)",
+                "JIRA_BASE_URL must start with https:// "
+                "(or http:// for local development)",
                 EXIT_USAGE,
             )
 
@@ -82,7 +83,8 @@ class JiraClient:
             use_legacy_search = False
         else:
             raise ScriptError(
-                "Set JIRA_PAT for Jira Server/Data Center or set both JIRA_USER_EMAIL and JIRA_API_TOKEN for Jira Cloud",
+                "Set JIRA_PAT for Jira Server/Data Center or set both "
+                "JIRA_USER_EMAIL and JIRA_API_TOKEN for Jira Cloud",
                 EXIT_USAGE,
             )
 
@@ -121,9 +123,13 @@ class JiraClient:
         except urllib.error.HTTPError as exc:
             raw = exc.read().decode("utf-8")
             details = _extract_error_message(raw)
-            raise ScriptError(f"HTTP {exc.code} from {method} {url}: {details}") from exc
+            raise ScriptError(
+                f"HTTP {exc.code} from {method} {url}: {details}"
+            ) from exc
         except urllib.error.URLError as exc:
-            raise ScriptError(f"Could not reach Jira API at {url}: {exc.reason}") from exc
+            raise ScriptError(
+                f"Could not reach Jira API at {url}: {exc.reason}"
+            ) from exc
 
         if not raw.strip():
             return None
@@ -300,7 +306,11 @@ def handle_transition(client: JiraClient, args: argparse.Namespace) -> Any:
         f"/issue/{args.issue_key}/transitions",
         {"transition": {"id": transition_id}},
     )
-    return {"key": args.issue_key, "transitionId": transition_id, "status": "transitioned"}
+    return {
+        "key": args.issue_key,
+        "transitionId": transition_id,
+        "status": "transitioned",
+    }
 
 
 def handle_comment(client: JiraClient, args: argparse.Namespace) -> Any:
@@ -309,7 +319,8 @@ def handle_comment(client: JiraClient, args: argparse.Namespace) -> Any:
     body = args.body if args.body is not None else sys.stdin.read().strip()
     if not body:
         raise ScriptError(
-            "Provide a comment body as an argument or pipe it through stdin for comment",
+            "Provide a comment body as an argument or pipe it through "
+            "stdin for comment",
             EXIT_USAGE,
         )
     return client.request("POST", f"/issue/{args.issue_key}/comment", {"body": body})
@@ -333,7 +344,8 @@ def handle_fields(client: JiraClient, args: argparse.Namespace) -> Any:
         if not INTEGER_PATTERN.match(args.issue_type_id):
             raise ScriptError("issue_type_id must be a positive integer", EXIT_USAGE)
         return client.request(
-            "GET", f"/issue/createmeta/{args.project_key}/issuetypes/{args.issue_type_id}"
+            "GET",
+            f"/issue/createmeta/{args.project_key}/issuetypes/{args.issue_type_id}",
         )
     return client.request("GET", f"/issue/createmeta/{args.project_key}/issuetypes")
 
@@ -341,11 +353,17 @@ def handle_fields(client: JiraClient, args: argparse.Namespace) -> Any:
 def create_parser() -> argparse.ArgumentParser:
     """Create the command-line parser."""
     parser = argparse.ArgumentParser(
-        description="Jira REST API helper for search, issue changes, comments, and transitions."
+        description=(
+            "Jira REST API helper for search, issue changes, comments, "
+            "and transitions."
+        )
     )
     parser.add_argument(
         "--fields",
-        help="Comma-delimited field list for read commands, for example key,fields.summary.",
+        help=(
+            "Comma-delimited field list for read commands, for example "
+            "key,fields.summary."
+        ),
     )
 
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -365,7 +383,10 @@ def create_parser() -> argparse.ArgumentParser:
     get_parser.add_argument("issue_key", help="Issue key, for example PROJ-123.")
     get_parser.set_defaults(handler=handle_get)
 
-    create_parser_ = subparsers.add_parser("create", help="Create an issue from a JSON payload.")
+    create_parser_ = subparsers.add_parser(
+        "create",
+        help="Create an issue from a JSON payload.",
+    )
     create_parser_.add_argument(
         "payload",
         nargs="?",
@@ -373,7 +394,10 @@ def create_parser() -> argparse.ArgumentParser:
     )
     create_parser_.set_defaults(handler=handle_create)
 
-    update_parser = subparsers.add_parser("update", help="Update an issue with a JSON payload.")
+    update_parser = subparsers.add_parser(
+        "update",
+        help="Update an issue with a JSON payload.",
+    )
     update_parser.add_argument("issue_key", help="Issue key, for example PROJ-123.")
     update_parser.add_argument(
         "payload",

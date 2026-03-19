@@ -25,18 +25,18 @@ Use `--fields` on read commands by default to keep output concise. The script su
 
 Set the required environment variables before running the script.
 
-| Platform | Runtime |
-| -------- | ------- |
+| Platform       | Runtime      |
+|----------------|--------------|
 | Cross-platform | Python 3.11+ |
 
 ### Authentication Variables
 
-| Variable | When required | Purpose |
-| -------- | ------------- | ------- |
-| `JIRA_BASE_URL` | Always | Jira base URL, for example `https://company.atlassian.net` |
-| `JIRA_USER_EMAIL` | Jira Cloud | Account email used for basic authentication |
-| `JIRA_API_TOKEN` | Jira Cloud | API token paired with the Jira Cloud email |
-| `JIRA_PAT` | Jira Server or Data Center | Personal access token used for bearer authentication |
+| Variable          | When required              | Purpose                                                    |
+|-------------------|----------------------------|------------------------------------------------------------|
+| `JIRA_BASE_URL`   | Always                     | Jira base URL, for example `https://company.atlassian.net` |
+| `JIRA_USER_EMAIL` | Jira Cloud                 | Account email used for basic authentication                |
+| `JIRA_API_TOKEN`  | Jira Cloud                 | API token paired with the Jira Cloud email                 |
+| `JIRA_PAT`        | Jira Server or Data Center | Personal access token used for bearer authentication       |
 
 Authentication is selected automatically:
 
@@ -73,17 +73,17 @@ EOF
 
 ## Parameters Reference
 
-| Command or option | Syntax | Default | Description |
-| ----------------- | ------ | ------- | ----------- |
-| `search` | `python scripts/jira.py search '<jql>' [max_results]` | `max_results = 50` | Search for issues with JQL |
-| `get` | `python scripts/jira.py get <ISSUE-KEY>` | None | Get one issue |
-| `create` | `python scripts/jira.py create '<json>'` | Reads stdin if omitted | Create an issue from JSON |
-| `update` | `python scripts/jira.py update <ISSUE-KEY> '<json>'` | Reads stdin if omitted | Update an issue from JSON |
-| `transition` | `python scripts/jira.py transition <ISSUE-KEY> '<name-or-id>'` | None | Move an issue to another workflow state |
-| `comment` | `python scripts/jira.py comment <ISSUE-KEY> '<body>'` | Reads stdin if omitted | Add a comment to an issue |
-| `comments` | `python scripts/jira.py comments <ISSUE-KEY> [ISSUE-KEY ...]` | None | List comments across one or more issues |
-| `fields` | `python scripts/jira.py fields <PROJECT-KEY> [issue-type-id]` | None | Discover issue types or required create fields |
-| `--fields` | `--fields key,fields.summary,...` | None | Extract selected fields from `search`, `get`, and `comments` output |
+| Command or option | Syntax                                                         | Default                | Description                                                         |
+|-------------------|----------------------------------------------------------------|------------------------|---------------------------------------------------------------------|
+| `search`          | `python scripts/jira.py search '<jql>' [max_results]`          | `max_results = 50`     | Search for issues with JQL                                          |
+| `get`             | `python scripts/jira.py get <ISSUE-KEY>`                       | None                   | Get one issue                                                       |
+| `create`          | `python scripts/jira.py create '<json>'`                       | Reads stdin if omitted | Create an issue from JSON                                           |
+| `update`          | `python scripts/jira.py update <ISSUE-KEY> '<json>'`           | Reads stdin if omitted | Update an issue from JSON                                           |
+| `transition`      | `python scripts/jira.py transition <ISSUE-KEY> '<name-or-id>'` | None                   | Move an issue to another workflow state                             |
+| `comment`         | `python scripts/jira.py comment <ISSUE-KEY> '<body>'`          | Reads stdin if omitted | Add a comment to an issue                                           |
+| `comments`        | `python scripts/jira.py comments <ISSUE-KEY> [ISSUE-KEY ...]`  | None                   | List comments across one or more issues                             |
+| `fields`          | `python scripts/jira.py fields <PROJECT-KEY> [issue-type-id]`  | None                   | Discover issue types or required create fields                      |
+| `--fields`        | `--fields key,fields.summary,...`                              | None                   | Extract selected fields from `search`, `get`, and `comments` output |
 
 ## Script Reference
 
@@ -167,14 +167,14 @@ python scripts/jira.py comments PROJ-123 PROJ-456 --fields _issue,author.display
 
 ## Troubleshooting
 
-| Symptom | Likely cause | Resolution |
-| ------- | ------------ | ---------- |
-| `JIRA_BASE_URL is not set` | Base URL is missing | Export `JIRA_BASE_URL` in the current shell |
-| Authentication error | Wrong token or missing auth variables | Verify `JIRA_PAT` for Jira Server or Data Center, or verify `JIRA_USER_EMAIL` and `JIRA_API_TOKEN` for Jira Cloud |
-| `Invalid issue key` | Issue key format is malformed | Use keys in the form `PROJ-123` |
-| Transition not found | The requested workflow transition is unavailable | Re-run the command with the transition name returned in the error output |
-| JSON payload error | Invalid JSON was passed to `create` or `update` | Validate the payload and retry with well-formed JSON |
-| Network connection error | Jira instance URL is unreachable | Verify the base URL and local network access |
+| Symptom                    | Likely cause                                     | Resolution                                                                                                        |
+|----------------------------|--------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| `JIRA_BASE_URL is not set` | Base URL is missing                              | Export `JIRA_BASE_URL` in the current shell                                                                       |
+| Authentication error       | Wrong token or missing auth variables            | Verify `JIRA_PAT` for Jira Server or Data Center, or verify `JIRA_USER_EMAIL` and `JIRA_API_TOKEN` for Jira Cloud |
+| `Invalid issue key`        | Issue key format is malformed                    | Use keys in the form `PROJ-123`                                                                                   |
+| Transition not found       | The requested workflow transition is unavailable | Re-run the command with the transition name returned in the error output                                          |
+| JSON payload error         | Invalid JSON was passed to `create` or `update`  | Validate the payload and retry with well-formed JSON                                                              |
+| Network connection error   | Jira instance URL is unreachable                 | Verify the base URL and local network access                                                                      |
 
 ## Attribution
 

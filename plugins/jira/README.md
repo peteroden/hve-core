@@ -3,6 +3,18 @@
 
 Jira backlog management, PRD issue planning, and issue operations through agents, prompts, instructions, and a Python skill
 
+## Overview
+
+Manage Jira backlog workflows and PRD-driven issue planning from VS Code. This collection adds dedicated Jira agents, prompts, and instructions on top of the Jira skill so discovery, triage, execution, and planning workflows use the same tracking and handoff patterns as the rest of HVE Core.
+
+This collection includes:
+
+- A Jira Backlog Manager agent for discovery, triage, execution, and single-issue backlog actions
+- A Jira PRD to WIT planning agent for converting requirements documents into Jira-ready issue hierarchies
+- Jira prompts for backlog discovery, triage, execution, and PRD planning workflows
+- Jira planning instructions for discovery, triage, execution, and PRD handoff artifacts
+- The Jira skill for JQL search, issue inspection, creation, updates, transitions, comments, and field discovery
+
 ## Install
 
 ```bash
@@ -38,9 +50,9 @@ copilot plugin install jira@hve-core
 
 ## Skills
 
-| Skill | Description |
-|-------|-------------|
-| jira  | jira        |
+| Skill | Description                                                                                                                                                                                                                                                                                                                                  |
+|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| jira  | Jira issue workflows for search, issue updates, transitions, comments, and field discovery via the Jira REST API. Use when you need to search with JQL, inspect an issue, create or update work items, move an issue between statuses, post comments, or discover required fields for issue creation. - Brought to you by microsoft/hve-core |
 
 ---
 

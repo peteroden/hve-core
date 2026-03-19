@@ -1,4 +1,5 @@
-"""Shared fixtures for GitLab skill tests."""
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: MIT"""Shared fixtures for GitLab skill tests."""
 
 from __future__ import annotations
 

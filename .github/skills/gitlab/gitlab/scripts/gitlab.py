@@ -5,8 +5,6 @@
 # requires-python = ">=3.11"
 # ///
 
-from __future__ import annotations
-
 """GitLab REST API v4 client for merge requests, pipelines, and jobs.
 
 Environment variables:
@@ -14,6 +12,8 @@ Environment variables:
     GITLAB_TOKEN: Required personal access token.
     GITLAB_PROJECT: Optional project id or path. Auto-detected from git remote.
 """
+
+from __future__ import annotations
 
 import json
 import os
@@ -63,7 +63,11 @@ def require_environment() -> None:
     if not gitlab_url:
         die("GITLAB_URL is not set", EXIT_USAGE)
     if not re.match(r"^https?://", gitlab_url):
-        die("GITLAB_URL must start with https:// (or http:// for local dev)", EXIT_USAGE)
+        die(
+            "GITLAB_URL must start with https:// "
+            "(or http:// for local dev)",
+            EXIT_USAGE,
+        )
     if not gitlab_token:
         die("GITLAB_TOKEN is not set", EXIT_USAGE)
 
@@ -117,7 +121,12 @@ def validate_positive_int(value: str, label: str = "value") -> None:
         die(f"{label} must be a positive integer, got: {value}", EXIT_USAGE)
 
 
-def request(method: str, url: str, data: object | None = None, quiet: bool = False) -> object | None:
+def request(
+    method: str,
+    url: str,
+    data: object | None = None,
+    quiet: bool = False,
+) -> object | None:
     """Issue an HTTP request to the GitLab API.
 
     Args:
@@ -143,7 +152,10 @@ def request(method: str, url: str, data: object | None = None, quiet: bool = Fal
         raw = error.read().decode()
         try:
             parsed_error = json.loads(raw)
-            print(parsed_error.get("message", parsed_error.get("error", parsed_error)), file=sys.stderr)
+            print(
+                parsed_error.get("message", parsed_error.get("error", parsed_error)),
+                file=sys.stderr,
+            )
         except (json.JSONDecodeError, ValueError):
             print(raw, file=sys.stderr)
         die(f"HTTP {error.code} from {method} {url}")
@@ -207,7 +219,12 @@ def print_fields(data: Any) -> None:
     if isinstance(data, list):
         print("\t".join(selected_fields))
         for item in cast(list[Any], data):
-            print("\t".join(extract_field(item, field_name) for field_name in selected_fields))
+            print(
+                "\t".join(
+                    extract_field(item, field_name)
+                    for field_name in selected_fields
+                )
+            )
         return
 
     for field_name in selected_fields:
@@ -257,7 +274,11 @@ def cmd_mr_create(args: list[str]) -> None:
     usage = "usage: gitlab mr-create <json> or pipe JSON to stdin"
     if not raw_payload:
         die(usage, EXIT_USAGE)
-    request("POST", f"{api_url}/projects/{project()}/merge_requests", load_json_payload(raw_payload, usage))
+    request(
+        "POST",
+        f"{api_url}/projects/{project()}/merge_requests",
+        load_json_payload(raw_payload, usage),
+    )
 
 
 def cmd_mr_update(args: list[str]) -> None:
@@ -285,7 +306,10 @@ def cmd_mr_comment(args: list[str]) -> None:
     validate_numeric_id(merge_request_iid)
     body = args[1] if len(args) > 1 else sys.stdin.read().strip()
     if not body:
-        die("usage: gitlab mr-comment <mr-iid> <body> or pipe body to stdin", EXIT_USAGE)
+        die(
+            "usage: gitlab mr-comment <mr-iid> <body> or pipe body to stdin",
+            EXIT_USAGE,
+        )
     request(
         "POST",
         f"{api_url}/projects/{project()}/merge_requests/{merge_request_iid}/notes",
@@ -310,7 +334,8 @@ def cmd_mr_notes(args: list[str]) -> None:
         notes = [
             cast(dict[str, Any], note)
             for note in cast(list[Any], data)
-            if isinstance(note, dict) and not cast(dict[str, Any], note).get("system", False)
+            if isinstance(note, dict)
+            and not cast(dict[str, Any], note).get("system", False)
         ]
         print_fields(notes)
 
@@ -359,7 +384,11 @@ def cmd_job_log(args: list[str]) -> None:
     job_id = args[0]
     validate_numeric_id(job_id)
     url = f"{api_url}/projects/{project()}/jobs/{job_id}/trace"
-    request_obj = urllib.request.Request(url, headers={"PRIVATE-TOKEN": gitlab_token}, method="GET")
+    request_obj = urllib.request.Request(
+        url,
+        headers={"PRIVATE-TOKEN": gitlab_token},
+        method="GET",
+    )
     try:
         with urllib.request.urlopen(request_obj) as response:
             print(response.read().decode())
@@ -389,7 +418,9 @@ def main() -> int:
 
     if not arguments or arguments[0] not in COMMANDS:
         die(
-            "usage: gitlab {mr-list|mr-get|mr-create|mr-update|mr-comment|mr-notes|pipeline-get|pipeline-run|pipeline-jobs|job-log} [args...]",
+            "usage: gitlab {mr-list|mr-get|mr-create|mr-update|mr-comment|"
+            "mr-notes|pipeline-get|pipeline-run|pipeline-jobs|job-log} "
+            "[args...]",
             EXIT_USAGE,
         )
 
