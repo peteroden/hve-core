@@ -695,11 +695,6 @@ After the gitignore checkpoint, proceed to Checkpoint 5 (MCP Configuration).
 
 After the gitignore checkpoint (for **any** installation method), present MCP configuration guidance. This helps users who want to use agents that integrate with Azure DevOps, GitHub, or documentation services.
 
-If the user later works with the Jira or GitLab skills, share their runtime credential requirements as optional follow-up guidance:
-
-* Jira uses `JIRA_BASE_URL` plus either `JIRA_PAT` or the `JIRA_USER_EMAIL` and `JIRA_API_TOKEN` pair.
-* GitLab uses `GITLAB_URL` and `GITLAB_TOKEN`, with optional `GITLAB_PROJECT` when auto-detection is not sufficient.
-
 <!-- <mcp-guidance-prompt> -->
 ```text
 📡 MCP Server Configuration (Optional)
