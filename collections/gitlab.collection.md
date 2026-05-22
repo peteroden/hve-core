@@ -14,8 +14,8 @@ Use GitLab merge request and pipeline workflows from VS Code through a focused P
 
 ### Skills
 
-| Name       | Description                                                  |
-|------------|--------------------------------------------------------------|
-| **gitlab** | Manage GitLab merge requests and pipelines with a Python CLI |
+| Name       | Description                                                                   |
+|------------|-------------------------------------------------------------------------------|
+| **gitlab** | Manage GitLab merge requests, pipelines, and project issues with a Python CLI |
 
 <!-- END AUTO-GENERATED ARTIFACTS -->

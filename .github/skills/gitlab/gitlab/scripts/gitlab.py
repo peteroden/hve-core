@@ -104,7 +104,8 @@ def project() -> str:
 
     path = strip_git_suffix(path)
     if not path:
-        die(f"cannot extract project path from remote: {remote_url}", EXIT_USAGE)
+        die(
+            f"cannot extract project path from remote: {remote_url}", EXIT_USAGE)
     return urllib.parse.quote(path, safe="")
 
 
@@ -143,7 +144,8 @@ def request(
         "Accept": "application/json",
     }
     body = json.dumps(data).encode() if data is not None else None
-    request_obj = urllib.request.Request(url, data=body, headers=headers, method=method)
+    request_obj = urllib.request.Request(
+        url, data=body, headers=headers, method=method)
     try:
         with urllib.request.urlopen(request_obj) as response:
             raw = response.read().decode()
@@ -152,7 +154,8 @@ def request(
         try:
             parsed_error = json.loads(raw)
             print(
-                parsed_error.get("message", parsed_error.get("error", parsed_error)),
+                parsed_error.get("message", parsed_error.get(
+                    "error", parsed_error)),
                 file=sys.stderr,
             )
         except (json.JSONDecodeError, ValueError):
@@ -357,7 +360,8 @@ def cmd_pipeline_run(args: list[str]) -> None:
     """Trigger a pipeline for a branch or tag."""
     if not args:
         die("usage: gitlab pipeline-run <branch-or-tag>", EXIT_USAGE)
-    request("POST", f"{api_url}/projects/{project()}/pipelines", {"ref": args[0]})
+    request(
+        "POST", f"{api_url}/projects/{project()}/pipelines", {"ref": args[0]})
 
 
 def cmd_pipeline_jobs(args: list[str]) -> None:
@@ -373,6 +377,97 @@ def cmd_pipeline_jobs(args: list[str]) -> None:
     )
     if selected_fields and data is not None:
         print_fields(data)
+
+
+def cmd_issue_search(args: list[str]) -> None:
+    """List project issues."""
+    state = args[0] if args else "opened"
+    max_results = args[1] if len(args) > 1 else "20"
+    validate_positive_int(max_results, "max_results")
+    data = request(
+        "GET",
+        f"{api_url}/projects/{project()}/issues?state={state}&per_page={max_results}&order_by=created_at&sort=desc",
+        quiet=bool(selected_fields),
+    )
+    if selected_fields and data is not None:
+        print_fields(data)
+
+
+def cmd_issue_get(args: list[str]) -> None:
+    """Get one issue by project IID."""
+    if not args:
+        die("usage: gitlab issue-get <issue-iid>", EXIT_USAGE)
+    issue_iid = args[0]
+    validate_numeric_id(issue_iid)
+    data = request(
+        "GET",
+        f"{api_url}/projects/{project()}/issues/{issue_iid}",
+        quiet=bool(selected_fields),
+    )
+    if selected_fields and data is not None:
+        print_fields(data)
+
+
+def cmd_issue_create(args: list[str]) -> None:
+    """Create an issue from JSON input."""
+    raw_payload = args[0] if args else sys.stdin.read().strip()
+    usage = "usage: gitlab issue-create <json> or pipe JSON to stdin"
+    if not raw_payload:
+        die(usage, EXIT_USAGE)
+    request(
+        "POST",
+        f"{api_url}/projects/{project()}/issues",
+        load_json_payload(raw_payload, usage),
+    )
+
+
+def cmd_issue_update(args: list[str]) -> None:
+    """Update an issue from JSON input."""
+    if not args:
+        die("usage: gitlab issue-update <issue-iid> <json>", EXIT_USAGE)
+    issue_iid = args[0]
+    validate_numeric_id(issue_iid)
+    raw_payload = args[1] if len(args) > 1 else sys.stdin.read().strip()
+    usage = "usage: gitlab issue-update <issue-iid> <json> or pipe JSON to stdin"
+    if not raw_payload:
+        die(usage, EXIT_USAGE)
+    request(
+        "PUT",
+        f"{api_url}/projects/{project()}/issues/{issue_iid}",
+        load_json_payload(raw_payload, usage),
+    )
+
+
+def cmd_issue_list_milestones(args: list[str]) -> None:
+    """List project milestones."""
+    max_results = args[0] if args else "20"
+    validate_positive_int(max_results, "max_results")
+    data = request(
+        "GET",
+        f"{api_url}/projects/{project()}/milestones?per_page={max_results}",
+        quiet=bool(selected_fields),
+    )
+    if selected_fields and data is not None:
+        print_fields(data)
+
+
+def cmd_issue_add_note(args: list[str]) -> None:
+    """Create an issue note."""
+    if not args:
+        die("usage: gitlab issue-add-note <issue-iid> <body>", EXIT_USAGE)
+    issue_iid = args[0]
+    validate_numeric_id(issue_iid)
+    body = args[1] if len(args) > 1 else sys.stdin.read().strip()
+    if not body:
+        die(
+            "usage: gitlab issue-add-note <issue-iid> <body> or pipe body to stdin",
+            EXIT_USAGE,
+        )
+    request(
+        "POST",
+        f"{api_url}/projects/{project()}/issues/{issue_iid}/notes",
+        {"body": body},
+    )
 
 
 def cmd_job_log(args: list[str]) -> None:
@@ -406,6 +501,12 @@ COMMANDS: dict[str, Callable[[list[str]], None]] = {
     "pipeline-run": cmd_pipeline_run,
     "pipeline-jobs": cmd_pipeline_jobs,
     "job-log": cmd_job_log,
+    "issue-search": cmd_issue_search,
+    "issue-get": cmd_issue_get,
+    "issue-create": cmd_issue_create,
+    "issue-update": cmd_issue_update,
+    "issue-list-milestones": cmd_issue_list_milestones,
+    "issue-add-note": cmd_issue_add_note,
 }
 
 
@@ -418,8 +519,9 @@ def main() -> int:
         if not arguments or arguments[0] not in COMMANDS:
             die(
                 "usage: gitlab {mr-list|mr-get|mr-create|mr-update|mr-comment|"
-                "mr-notes|pipeline-get|pipeline-run|pipeline-jobs|job-log} "
-                "[args...]",
+                "mr-notes|pipeline-get|pipeline-run|pipeline-jobs|job-log|"
+                "issue-search|issue-get|issue-create|issue-update|"
+                "issue-list-milestones|issue-add-note} [args...]",
                 EXIT_USAGE,
             )
 

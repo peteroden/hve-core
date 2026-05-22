@@ -40,18 +40,32 @@ def fuzz_validate_numeric_id(data: bytes) -> None:
 
 
 def fuzz_extract_field(data: bytes) -> None:
-    """Fuzz nested field extraction on representative GitLab payloads."""
+    """Fuzz nested field extraction on representative GitLab MR and issue payloads."""
     provider = atheris.FuzzedDataProvider(data)
     payload = {
         "iid": provider.ConsumeIntInRange(0, 500),
+        "state": provider.ConsumeUnicodeNoSurrogates(10),
         "author": {"name": provider.ConsumeUnicodeNoSurrogates(20)},
         "labels": [provider.ConsumeUnicodeNoSurrogates(10) for _ in range(3)],
+        "assignees": [
+            {"username": provider.ConsumeUnicodeNoSurrogates(10)} for _ in range(2)
+        ],
+        "milestone": {
+            "title": provider.ConsumeUnicodeNoSurrogates(20),
+            "iid": provider.ConsumeIntInRange(0, 99),
+        },
+        "references": {"full": provider.ConsumeUnicodeNoSurrogates(30)},
         "nested": {"deep": {"value": provider.ConsumeIntInRange(0, 99)}},
     }
     path_options = [
         "iid",
+        "state",
         "author.name",
         "labels",
+        "assignees",
+        "milestone.title",
+        "milestone.iid",
+        "references.full",
         "nested.deep.value",
         provider.ConsumeUnicodeNoSurrogates(20),
     ]
@@ -141,6 +155,22 @@ class TestGitLabFuzzHarness:
         assert gitlab.extract_field(payload, "author.name") == "Ada"
         assert gitlab.extract_field(payload, "labels") == "bug, urgent"
 
+    def test_extract_field_handles_issue_payload_shape(self) -> None:
+        payload = {
+            "iid": 42,
+            "state": "opened",
+            "assignees": [{"username": "ada"}, {"username": "grace"}],
+            "milestone": {"title": "Sprint 12", "iid": 3},
+            "references": {"full": "group/project#42"},
+        }
+
+        assert gitlab.extract_field(payload, "iid") == "42"
+        assert gitlab.extract_field(payload, "state") == "opened"
+        assert gitlab.extract_field(payload, "milestone.title") == "Sprint 12"
+        assert gitlab.extract_field(payload, "milestone.iid") == "3"
+        assert gitlab.extract_field(
+            payload, "references.full") == "group/project#42"
+
     @pytest.mark.parametrize(
         ("raw_payload", "expected"),
         [
@@ -149,7 +179,8 @@ class TestGitLabFuzzHarness:
         ],
     )
     def test_load_json_payload(self, raw_payload: str, expected: object) -> None:
-        assert gitlab.load_json_payload(raw_payload, "usage: gitlab") == expected
+        assert gitlab.load_json_payload(
+            raw_payload, "usage: gitlab") == expected
 
 
 if __name__ == "__main__" and FUZZING:
